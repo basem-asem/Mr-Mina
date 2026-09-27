@@ -55,31 +55,33 @@ export default function TeacherDashboard() {
     let unsubscribers = [];
     const startListeners = () => {
       if (cancelled) return;
-      unsubscribers = Object.values(collections).map(({ name }) => onSnapshot(query(collection(db, name), where("teacherId", "==", uid)), (snapshot) => {
+      unsubscribers = Object.values(collections).map(({ name }) => onSnapshot(query(collection(db, name)), (snapshot) => {
         setData((current) => ({ ...current, [name]: snapshot.docs.map((item) => ({ id: item.id, ...item.data() })) }));
         pending -= 1;
         if (pending <= 0) setLoading(false);
       }, (error) => { console.error(error); setNotice("Could not load dashboard data. Check your Firestore rules."); setLoading(false); }));
     };
     // Preserve records from the previous per-teacher subcollections when moving to the shared collections.
-    const migrateLegacyRecords = async () => {
-      try {
-        for (const { name } of Object.values(collections)) {
-          const legacy = await getDocs(collection(db, "teacherDashboards", uid, name));
-          for (const oldRecord of legacy.docs) {
-            const target = doc(db, name, oldRecord.id);
-            const existing = await getDoc(target);
-            if (!existing.exists()) await setDoc(target, { ...oldRecord.data(), teacherId: uid });
-          }
-        }
-        startListeners();
-      } catch (error) {
-        console.error(error);
-        setNotice("Could not migrate the old teacher dashboard records. Check Firestore permissions.");
-        startListeners();
-      }
-    };
-    migrateLegacyRecords();
+    // const migrateLegacyRecords = async () => {
+    //   try {
+    //     for (const { name } of Object.values(collections)) {
+    //       const legacy = await getDocs(collection(db, "teacherDashboards", uid, name));
+    //       for (const oldRecord of legacy.docs) {
+    //         const target = doc(db, name, oldRecord.id);
+    //         const existing = await getDoc(target);
+    //         if (!existing.exists()) await setDoc(target, { ...oldRecord.data(), teacherId: uid });
+    //       }
+    //     }
+    //     startListeners();
+    //   } catch (error) {
+    //     console.error(error);
+    //     setNotice("Could not migrate the old teacher dashboard records. Check Firestore permissions.");
+    //     startListeners();
+    //   }
+    // };
+    // migrateLegacyRecords();
+    startListeners();
+
     return () => { cancelled = true; unsubscribers.forEach((unsubscribe) => unsubscribe()); };
   }, [uid]);
 
