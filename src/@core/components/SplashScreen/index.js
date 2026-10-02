@@ -15,8 +15,8 @@ const SplashScreen = ({ finishLoading }) => {
       targets: "#splashLogo",
       scale: {
         value: 1.5,
-        duration: 1600,
-        delay: 800,
+        duration: 1400,
+        delay: 100,
         easing: "easeInOutQuart",
       },
       delay: 250, // All properties except 'scale' inherit 250ms delay
@@ -39,7 +39,9 @@ const SplashScreen = ({ finishLoading }) => {
         alignItems: "center",
       }}
     >
-      <img id="splashLogo" src={appimagelight.src} width={200} height={200} />
+     <img id="splashLogo" src="/images/logos/mr-mina.svg" width={200} height={200} alt="Mr. Mina English" style={{ objectFit: "contain" }} />
+
+      {/* <img id="splashLogo" src={appimagelight.src} width={200} height={200} /> */}
     </div>
   );
 };

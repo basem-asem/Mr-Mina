@@ -3,10 +3,12 @@ import {
   AccountGroupOutline,
   AccountSupervisorCircleOutline,
   CashCheck,
+  ClipboardTextOutline,
   FrequentlyAskedQuestions,
   GiftOutline,
   HomeOutline,
   HumanGreetingVariant,
+  NotebookOutline,
   ImageOutline,
   InformationOutline,
   PostOutline,
@@ -23,27 +25,52 @@ const navigation = () => {
   return [
     {
       title: "Dashboard",
-      icon: HomeOutline,
+      icon: PostOutline,
       path: "/dashboard",
     },
     {
       sectionTitle: "Teacher Management",
     },
     {
-      icon: PostOutline,
+      icon: AccountGroupOutline,
       title: "Students",
-      path: "/teacher-dashboard",
+      path: "/students",
+    },
+    {
+      icon: AccountGroupOutline,
+      title: "Groups",
+      path: "/groups",
+    },
+    {
+      icon: NotebookOutline,
+      title: "Learning notes",
+      path: "/notes",
+    },
+    {
+      icon: ClipboardTextOutline,
+      title: "Attendance",
+      path: "/attendance",
+    },
+    {
+      icon: ViewDashboardOutline,
+      title: "Exams",
+      path: "/exams",
+    },
+    {
+      icon: HumanGreetingVariant,
+      title: "Private lessons",
+      path: "/lessons",
     },
     {
       title: t("navbar.employee"),
       icon: AccountSupervisorCircleOutline,
       path: "/Admins",
     },
-    {
-      icon: ViewDashboardOutline,
-      title: t("navbar.Hotels Category"),
-      path: "/categories",
-    },
+    // {
+    //   icon: ViewDashboardOutline,
+    //   title: t("navbar.Hotels Category"),
+    //   path: "/categories",
+    // },
     // {
     //   icon: AccountSupervisorCircleOutline,
     //   title: t("navbar.Supplier"),

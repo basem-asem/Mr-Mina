@@ -52,7 +52,8 @@ const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }) => {
   const IconTag = item.icon;
 
   const isNavLinkActive = () => {
-    if (router.pathname === item.path || handleURLQueries(router, item.path)) {
+    const currentPath = router.asPath.split("?")[0];
+    if (router.pathname === item.path || currentPath === item.path || currentPath.startsWith(`${item.path}/`) || handleURLQueries(router, item.path)) {
       return true;
     } else {
       return false;

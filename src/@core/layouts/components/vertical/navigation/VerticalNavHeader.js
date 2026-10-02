@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 // ** Configs
 import themeConfig from "src/configs/themeConfig";
 
-import appimagelight from "../../../../../../public/images/logos/favicon.png";
 import { useRouter } from "next/router";
 
 // ** Styled Components
@@ -51,11 +50,7 @@ const VerticalNavHeader = (props) => {
       ) : (
         <Link passHref href="/dashboard" locale={locale}>
           <StyledLink>
-            <img
-              src={appimagelight.src}
-              width={150}
-              height={150}
-            />
+            <img src="/images/logos/mr-mina.svg" width={168} height={64} alt="Mr. Mina English" style={{ objectFit: "contain" }} />
           </StyledLink>
         </Link>
       )}

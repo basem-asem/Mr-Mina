@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="128" viewBox="0 0 420 128" fill="none">
+  <defs>
+    <linearGradient id="book" x1="20" y1="16" x2="106" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7167F0"/>
+      <stop offset="1" stop-color="#35C6C2"/>
+    </linearGradient>
+    <linearGradient id="type" x1="128" y1="32" x2="357" y2="94" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#252E67"/>
+      <stop offset="1" stop-color="#6657C8"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="412" height="120" rx="28" fill="#F7F7FF"/>
+  <circle cx="64" cy="64" r="47" fill="url(#book)"/>
+  <path d="M30 46c12-4 22-2 34 6v37c-12-8-22-10-34-6V46Z" fill="white" fill-opacity=".98"/>
+  <path d="M98 46c-12-4-22-2-34 6v37c12-8 22-10 34-6V46Z" fill="white" fill-opacity=".82"/>
+  <path d="M64 53v36" stroke="#5B5DB9" stroke-width="3" stroke-linecap="round"/>
+  <path d="m46 36 5 6m31-6-5 6" stroke="#FFE08A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M42 99c11-5 22-4 32 2 10-6 21-7 32-2" stroke="#FFE08A" stroke-width="3" stroke-linecap="round"/>
+  <text x="128" y="67" fill="url(#type)" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="800" letter-spacing=".4">MR. MINA</text>
+  <text x="130" y="91" fill="#64708D" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="3.3">ENGLISH • LEARN WITH CONFIDENCE</text>
+</svg>

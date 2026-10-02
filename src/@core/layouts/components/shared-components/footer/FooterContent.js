@@ -4,7 +4,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTranslation from "src/@core/hooks/useTranslation";
-import footerimage from "../../../../../../public/images/logos/footer.png";
+import footerimage from "../../../../../../public/images/logos/mr-mina.svg";
 
 const FooterContent = () => {
   // ** Var

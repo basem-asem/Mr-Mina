@@ -39,7 +39,6 @@ export default function StudentProfile() {
     };
     const scopedCollection = (name, extra = []) => query(
       collection(db, name),
-      where("teacherId", "==", teacherId),
       ...extra
     );
     const subscribe = (key, ref, onData) => onSnapshot(ref, (snapshot) => {
@@ -91,11 +90,11 @@ export default function StudentProfile() {
   if (!router.isReady || !authReady || !loaded) return <Box sx={{ display: "grid", placeItems: "center", minHeight: "40vh" }}><CircularProgress /></Box>;
   if (!teacherId) return <Alert severity="warning">Sign in to view student records.</Alert>;
   if (loadError) return <Alert severity="error">{loadError}</Alert>;
-  if (!student) return <Alert severity="warning">Student not found. <Link href="/teacher-dashboard">Return to the teacher dashboard.</Link></Alert>;
+  if (!student) return <Alert severity="warning">Student not found. <Link href="/dashboard">Return to the dashboard.</Link></Alert>;
 
   return <Box>
-    <Link href="/teacher-dashboard" passHref legacyBehavior>
-      <Button component="a" sx={{ mb: 2 }}>← Back to teacher dashboard</Button>
+    <Link href="/dashboard" passHref legacyBehavior>
+      <Button component="a" sx={{ mb: 2 }}>← Back to dashboard</Button>
     </Link>
     <Typography variant="h4" sx={{ mb: 1 }}>{student.name || "Student"}</Typography>
     <Typography color="text.secondary" sx={{ mb: 3 }}>

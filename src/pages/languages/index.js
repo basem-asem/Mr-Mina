@@ -1,7 +1,6 @@
 import {
   Button,
   Grid,
-  InputAdornment,
   Paper,
   Table,
   TableBody,
@@ -10,14 +9,14 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
-import { Magnify, Pencil } from "mdi-material-ui";
+import { Pencil } from "mdi-material-ui";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useTranslation from "src/@core/hooks/useTranslation";
 import LanguageForm from "../../views/forms/LanguageForm";
+import SearchField from "src/@core/components/SearchField";
 
 const Languages = () => {
   const [updateKey, setUpdateKey] = useState();
@@ -25,19 +24,22 @@ const Languages = () => {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [search, setSearch] = useState("");
   const { t } = useTranslation();
   const { en, ar } = useSelector((state) => state.Translation);
 
   const filterData = (string = "") => {
+    setSearch(string);
+    setPage(0);
     const arr = [];
     for (const key in en) {
       arr.push(key);
     }
     const filteredArray = arr.filter(
       (obj) =>
-        obj.toLowerCase().match(string.toLowerCase()) ||
-        en[obj].toLowerCase().match(string.toLowerCase()) ||
-        ar[obj].toLowerCase().match(string.toLowerCase())
+        obj.toLowerCase().includes(string.toLowerCase()) ||
+        String(en[obj] || "").toLowerCase().includes(string.toLowerCase()) ||
+        String(ar[obj] || "").toLowerCase().includes(string.toLowerCase())
     );
     setKeys(filteredArray);
   };
@@ -64,23 +66,7 @@ const Languages = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <TextField
-            size="small"
-            sx={{ "& .MuiOutlinedInput-root": { borderRadius: 4 } }}
-            placeholder={t("form.search")}
-            autoFocus={true}
-            focused={true}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Magnify fontSize="small" />
-                </InputAdornment>
-              ),
-            }}
-            onChange={(e) => {
-              filterData(e.target.value.trim());
-            }}
-          />
+          <SearchField value={search} onChange={filterData} placeholder={t("form.search")} />
         </Grid>
       </Grid>
 

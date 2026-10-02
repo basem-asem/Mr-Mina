@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   collection,
   query,
@@ -24,23 +24,20 @@ import Link from "next/link";
 import { AccountLock, Eye, Pencil, Delete, Plus} from "mdi-material-ui";
 import AlertMessage from "../../views/Alert/AlertMessage";
 import { CircularProgress, TablePagination } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import userProfile from "public/images/logos/userProfile.png";
 import BlockDialog from "../../views/dailogs/Dialogbox";
-import InputAdornment from "@mui/material/InputAdornment";
-import Magnify from "mdi-material-ui/Magnify";
 import Grid from '@mui/material/Grid';
 import { useRouter } from "next/router";
-import { auto } from "@popperjs/core";
 import useTranslation from "src/@core/hooks/useTranslation";
 import UserForm from "../../views/forms/UserForm";
 import DeleteDailog from "./DeleteDailog";
+import SearchField from "src/@core/components/SearchField";
 
 function user() {
   const router = useRouter();
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState("");
-  const [inputSearch, setInputSearch] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,6 +46,10 @@ function user() {
   const [type, setType] = useState('');
 
   const { t } = useTranslation(router?.locale);
+  const inputSearch = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    return term ? users.filter((currentUser) => String(currentUser.display_name || "").toLowerCase().includes(term)) : users;
+  }, [users, searchTerm]);
   
   // function for delete Service details
   const handleDelete = async () => {
@@ -115,13 +116,6 @@ function user() {
   setShowPop(false);
 };
 
-  const filterData = (srt) => {
-    const inputSerch = users.filter((curName) =>
-    curName.display_name.toLowerCase().startsWith(srt)
-    );
-    setInputSearch(inputSerch);
-  };
-
   useEffect(() => {
     const fetchAllUser = async () => {
       const UsersQuery = query(
@@ -145,7 +139,6 @@ function user() {
         }));
         
         setUsers(userarr);
-        setInputSearch(userarr);
         setIsLoading(false)
       });
     };
@@ -156,25 +149,7 @@ function user() {
     <>
       <Grid  container spacing={6}>
         <Grid item xs={12} md={8} >
-          <TextField
-            size="small"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 4,
-                marginBottom: 4,
-                width:{xs:auto,sm:400}
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="right">
-                  <Magnify fontSize="small" sx={{ marginLeft : 2}}/>
-                </InputAdornment>
-              ),
-            }}
-            placeholder={t("search.name")}
-            onChange={(e) => filterData(e.target.value)}
-          />
+          <SearchField value={searchTerm} onChange={(value) => { setSearchTerm(value); setPage(0); }} placeholder={t("search.name")} expandedWidth={400} sx={{ mb: 4 }} />
         </Grid>
         <Grid item xs={12} md={4} textAlign="right" sx={{ marginBottom: 4 }}>
           <Button variant="contained" onClick={(e) => {

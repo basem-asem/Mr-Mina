@@ -10,7 +10,6 @@ export default function ExamRoster() {
   const router = useRouter();
   const rawExamId = router.query.examId;
   const examId = Array.isArray(rawExamId) ? rawExamId[0] : rawExamId;
-  const [teacherId, setTeacherId] = useState(null);
   const [authReady, setAuthReady] = useState(false);
   const [exam, setExam] = useState(null);
   const [students, setStudents] = useState([]);
@@ -20,6 +19,7 @@ export default function ExamRoster() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [teacherId, setTeacherId] = useState(null);
 
   useEffect(() => onAuthStateChanged(auth, (user) => {
     setTeacherId(user?.uid || null);
@@ -36,17 +36,16 @@ export default function ExamRoster() {
     const markLoaded = () => { if (examLoaded && studentsLoaded && resultsLoaded) setLoading(false); };
     const examUnsubscribe = onSnapshot(doc(db, "exams", examId), (snapshot) => {
       const record = snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
-      if (record?.teacherId !== teacherId) setExam(null);
-      else setExam(record);
+      setExam(record);
       examLoaded = true;
       markLoaded();
     }, (loadError) => { console.error(loadError); setError("Could not load this exam. Check Firestore permissions."); examLoaded = true; markLoaded(); });
-    const studentsUnsubscribe = onSnapshot(query(collection(db, "students"), where("teacherId", "==", teacherId)), (snapshot) => {
+    const studentsUnsubscribe = onSnapshot(query(collection(db, "students")), (snapshot) => {
       setStudents(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })));
       studentsLoaded = true;
       markLoaded();
     }, (loadError) => { console.error(loadError); setError("Could not load the student roster. Check Firestore permissions."); studentsLoaded = true; markLoaded(); });
-    const resultsUnsubscribe = onSnapshot(query(collection(db, "examResults"), where("teacherId", "==", teacherId), where("examId", "==", examId)), (snapshot) => {
+    const resultsUnsubscribe = onSnapshot(query(collection(db, "examResults"), where("examId", "==", examId)), (snapshot) => {
       const next = Object.fromEntries(snapshot.docs.map((item) => [item.data().studentId, { id: item.id, ...item.data() }]));
       setResults(next);
       setScores(Object.fromEntries(Object.entries(next).map(([studentId, result]) => [studentId, String(result.score ?? "")])));
@@ -69,7 +68,6 @@ export default function ExamRoster() {
         if (!Number.isFinite(score) || score < 0 || score > Number(exam.maxScore)) throw new Error(`Enter a score from 0 to ${exam.maxScore} for ${student.name}.`);
         const resultId = `${examId}_${student.id}`;
         return setDoc(doc(db, "examResults", resultId), {
-          teacherId,
           examId,
           studentId: student.id,
           name: exam.name,
@@ -92,10 +90,10 @@ export default function ExamRoster() {
   if (!router.isReady || !authReady || loading) return <Box sx={{ display: "grid", placeItems: "center", minHeight: "40vh" }}><CircularProgress /></Box>;
   if (!teacherId) return <Alert severity="warning">Sign in to enter exam results.</Alert>;
   if (error && !exam) return <Alert severity="error">{error}</Alert>;
-  if (!exam) return <Alert severity="warning">Exam not found. <Link href="/teacher-dashboard">Return to the teacher dashboard.</Link></Alert>;
+  if (!exam) return <Alert severity="warning">Exam not found. <Link href="/dashboard">Return to the dashboard.</Link></Alert>;
 
   return <Box>
-    <Link href="/teacher-dashboard" passHref legacyBehavior><Button component="a" sx={{ mb: 2 }}>← Back to teacher dashboard</Button></Link>
+    <Link href="/dashboard" passHref legacyBehavior><Button component="a" sx={{ mb: 2 }}>← Back to dashboard</Button></Link>
     <Typography variant="h4" sx={{ mb: 1 }}>{exam.name}</Typography>
     <Typography color="text.secondary" sx={{ mb: 3 }}>
       {[exam.grade, exam.gradeYear && `Grade ${exam.gradeYear}`, exam.className && `Class ${exam.className}`].filter(Boolean).join(" · ")} · Maximum score: {exam.maxScore}
@@ -109,7 +107,7 @@ export default function ExamRoster() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Typography sx={{ flex: 1 }}>{student.name || "Student"}</Typography>
             <TextField label={`Score / ${exam.maxScore}`} type="number" size="small" inputProps={{ min: 0, max: Number(exam.maxScore), step: "any" }} value={scores[student.id] ?? ""} onChange={(event) => setScores((current) => ({ ...current, [student.id]: event.target.value }))} />
-            {results[student.id] && <Link href={`/teacher-dashboard/students/${student.id}`} passHref legacyBehavior><Button component="a" size="small">Profile</Button></Link>}
+            {results[student.id] && <Link href={`/students/${student.id}`} passHref legacyBehavior><Button component="a" size="small">Profile</Button></Link>}
           </Box>
         </Grid>)}
       </Grid>}
