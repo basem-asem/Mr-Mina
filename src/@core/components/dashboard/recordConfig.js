@@ -3,13 +3,13 @@ export const recordSections = {
   Groups: { name: "groups", fields: ["name", "points", "description"] },
   Notes: { name: "notes", fields: ["studentId", "category", "topic", "text", "date"] },
   Attendance: { name: "attendance", fields: ["studentId", "date", "status", "lesson"] },
-  Exams: { name: "exams", fields: ["name", "maxScore", "grade", "gradeYear", "className", "date"] },
+  Exams: { name: "exams", fields: ["name", "maxScore", "grade", "gradeYear","language", "className", "date"] },
   "Private lessons": { name: "lessons", fields: ["name", "day", "time", "capacity", "studentIds"] },
 };
 
 export const defaultsFor = (name) => {
-  if (name === "students") return { grade: "Senior", gradeYear: "1", className: "A", language: "English", privateLesson: false, groupId: "" };
-  if (name === "exams") return { grade: "Middle", gradeYear: "1", className: "A" };
+  if (name === "students") return { grade: "Senior", gradeYear: "1", className: "B", language: "French", privateLesson: false, groupId: "" };
+  if (name === "exams") return { grade: "Middle", gradeYear: "1", language: "English", className: "A"};
   if (name === "attendance") return { status: "Present" };
   if (name === "notes") return { category: "Grammar" };
   return {};

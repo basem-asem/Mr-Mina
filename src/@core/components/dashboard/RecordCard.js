@@ -11,14 +11,14 @@ export default function RecordCard({ section, row, students, groups, onEdit, onD
     groups: ["points", "description"],
     notes: ["studentId", "category", "topic", "text", "date"],
     attendance: ["studentId", "date", "status", "lesson"],
-    exams: ["maxScore", "grade", "gradeYear", "className", "date"],
+    exams: ["maxScore", "date"],
     lessons: ["day", "time", "capacity", "studentIds"],
   }[configName] || [];
 
   return <Card variant="outlined" sx={{ height: "100%" }}><CardContent>
     {configName === "students" ? <Link href={`/students/${row.id}`} passHref legacyBehavior><Typography component="a" variant="h6" sx={{ mb: 1, display: "block", cursor: "pointer", textDecoration: "none", color: "text.primary" }}>{row.name || "Student"}</Typography></Link> : <Typography variant="h6" sx={{ mb: 1 }}>{row.name || row.topic || row.lesson || "Record"}</Typography>}
     {configName === "groups" && <Typography variant="body2" sx={{ mb: 1 }}><b>Students:</b> {students.filter((student) => student.groupId === row.id).map((student) => student.name).join(", ") || "No students assigned"}</Typography>}
-    {configName === "exams" && <><Typography variant="body2" sx={{ mb: 1 }}><b>Class:</b> {[row.grade, row.gradeYear && `Year ${row.gradeYear}`, row.className && `Class ${row.className}`].filter(Boolean).join(" · ")} · <b>Maximum:</b> {row.maxScore}</Typography><Link href={`/exams/${row.id}`} passHref legacyBehavior><Button component="a" size="small" variant="outlined" sx={{ mb: 1 }}>Open roster and enter results</Button></Link></>}
+    {configName === "exams" && <><Typography variant="body2" sx={{ mb: 1 }}><b>Class:</b> {[row.grade, row.gradeYear && `Year ${row.gradeYear}`, row.className && `Class ${row.className}`].filter(Boolean).join(" - ")} . <b>Language:</b> {row.language}</Typography><Link href={`/exams/${row.id}`} passHref legacyBehavior><Button component="a" size="small" variant="outlined" sx={{ mb: 1 }}>Open roster and enter results</Button></Link></>}
     {fields.map((field) => {
       let value = row[field];
       if (field === "groupId") value = labelFor(value, groups);

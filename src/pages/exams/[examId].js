@@ -55,7 +55,7 @@ export default function ExamRoster() {
     return () => { examUnsubscribe(); studentsUnsubscribe(); resultsUnsubscribe(); };
   }, [authReady, teacherId, examId]);
 
-  const roster = useMemo(() => students.filter((student) => student.grade === exam?.grade && String(student.gradeYear || "") === String(exam?.gradeYear || "") && student.className === exam?.className).sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""))), [students, exam]);
+  const roster = useMemo(() => students.filter((student) => student.grade === exam?.grade && String(student.gradeYear || "") === String(exam?.gradeYear || "") && student.className === exam?.className && student.language === exam?.language).sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""))), [students, exam]);
 
   const saveResults = async () => {
     if (!teacherId || !exam || !examId) return;
