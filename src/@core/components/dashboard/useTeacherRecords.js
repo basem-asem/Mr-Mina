@@ -23,7 +23,7 @@ export default function useTeacherRecords(section) {
   useEffect(() => {
     if (!uid) { setLoading(false); return undefined; }
     setLoading(true);
-    const names = Object.values(recordSections).map(({ name }) => name);
+    const names = [...Object.values(recordSections).map(({ name }) => name), "examResults"];
     const loaded = new Set();
     const unsubscribers = names.map((name) => onSnapshot(query(collection(db, name)), (snapshot) => {
       setData((current) => ({ ...current, [name]: snapshot.docs.map((item) => ({ id: item.id, ...item.data() })) }));
